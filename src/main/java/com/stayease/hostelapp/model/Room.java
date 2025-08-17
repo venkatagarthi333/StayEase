@@ -16,8 +16,9 @@ public class Room {
 
     private String roomNumber;
     private String bedType; // e.g., "2-sharing", "3-sharing"
-    private int totalBeds;
+    private int capacity;
     private int availableBeds;
+    private double price; //
 
     @ManyToOne
     @JoinColumn(name = "pg_hostel_id")

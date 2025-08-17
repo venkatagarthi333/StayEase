@@ -1,8 +1,12 @@
 package com.stayease.hostelapp.controller;
 
+
+import com.stayease.hostelapp.dto.PilgrimResponseDTO;
+import com.stayease.hostelapp.model.Piligrim;
 import com.stayease.hostelapp.model.Room;
 import com.stayease.hostelapp.service.RoomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
@@ -39,5 +43,12 @@ public class RoomController {
     @GetMapping("/get-rooms/{pgHostelId}")
     public List<Room> getRoomsByPG(@PathVariable Long pgHostelId) {
         return roomService.getRoomsByPG(pgHostelId);
+    }
+
+    //get piligrims using roomNumber
+    @GetMapping("/view-pilgrims/{roomNumber}")
+    public ResponseEntity<List<PilgrimResponseDTO>> getPilgrimsByRoomNumber(@PathVariable String roomNumber) {
+        List<PilgrimResponseDTO> pilgrims = roomService.getPilgrimsByRoomNumber(roomNumber);
+        return ResponseEntity.ok(pilgrims);
     }
 }

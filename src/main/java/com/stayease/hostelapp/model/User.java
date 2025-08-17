@@ -1,3 +1,4 @@
+// User.java
 package com.stayease.hostelapp.model;
 
 import com.fasterxml.jackson.annotation.JsonManagedReference;
@@ -34,4 +35,6 @@ public class User {
     @JsonManagedReference
     private List<PGHostel> hostels = new ArrayList<>();
 
+    @OneToOne(mappedBy = "user", cascade = CascadeType.ALL)
+    private Piligrim pilgrim;
 }

@@ -1,9 +1,9 @@
+// Pilgrim.java
 package com.stayease.hostelapp.model;
+
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
-import java.util.List;
 @Entity
 @Data
 @NoArgsConstructor
@@ -13,18 +13,15 @@ public class Piligrim {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id")
-
     private Room room;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pg_hostel_id")
     private PGHostel pgHostel;
-
-
 }

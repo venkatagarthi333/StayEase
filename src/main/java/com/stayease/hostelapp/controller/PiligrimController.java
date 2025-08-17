@@ -1,5 +1,6 @@
 package com.stayease.hostelapp.controller;
 
+import com.stayease.hostelapp.dto.BookingResponseDTO;
 import com.stayease.hostelapp.dto.PGHostelResponseDTO;
 import com.stayease.hostelapp.model.PGHostel;
 import com.stayease.hostelapp.model.Piligrim;
@@ -47,6 +48,7 @@ public class PiligrimController {
 
 
     //books room
+    /*
     @PostMapping("/book/{roomId}")
     @PreAuthorize("hasRole('PILGRIM')")
     public ResponseEntity<?> bookRoom(@AuthenticationPrincipal UserDetails userDetails,
@@ -56,6 +58,20 @@ public class PiligrimController {
     }
 
     //check out and cancel room
+    @DeleteMapping("/cancel-booking")
+    @PreAuthorize("hasRole('PILGRIM')")
+    public ResponseEntity<?> cancelBooking(@AuthenticationPrincipal UserDetails userDetails) {
+        pilgrimService.cancelBooking(userDetails.getUsername());
+        return ResponseEntity.ok("Booking cancelled successfully");
+    }*/
+    @PostMapping("/book/{roomId}")
+    @PreAuthorize("hasRole('PILGRIM')")
+    public ResponseEntity<BookingResponseDTO> bookRoom(@AuthenticationPrincipal UserDetails userDetails,
+                                                       @PathVariable Long roomId) {
+        BookingResponseDTO booking = pilgrimService.bookRoom(userDetails.getUsername(), roomId);
+        return ResponseEntity.ok(booking);
+    }
+
     @DeleteMapping("/cancel-booking")
     @PreAuthorize("hasRole('PILGRIM')")
     public ResponseEntity<?> cancelBooking(@AuthenticationPrincipal UserDetails userDetails) {
