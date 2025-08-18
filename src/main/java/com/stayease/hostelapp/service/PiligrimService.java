@@ -35,7 +35,6 @@ public class PiligrimService {
         return roomRepo.findByPgHostelId(hostelId);
     }
 
-
         @Transactional
         public BookingResponseDTO bookRoom(String pilgrimEmail, Long roomId) {
             //to check rooms available or not
@@ -86,18 +85,33 @@ public class PiligrimService {
             if (pilgrim.getRoom() == null) {
                 throw new RuntimeException("No active booking to cancel for pilgrim with email: " + pilgrimEmail);
             }
+            Room room = pilgrim.getRoom();
             pilgrim.setRoom(null);
             pilgrim.setPgHostel(null);
-
-            /*Room room = pilgrim.getRoom();
-            room.setAvailableBeds(room.getAvailableBeds() + 1);
-            roomRepo.save(room);*/
-
             pilgrimRepo.save(pilgrim);
+
+            room.setAvailableBeds(room.getAvailableBeds()+1);
+            roomRepo.save(room);
         }
-        /*
-        @Transactional
-        public List<Piligrim> getPilgrimsByRoomNumber(String roomNumber) {
-            return pilgrimRepo.findByRoomNumber(roomNumber);
-        }*/
+    @Transactional()
+    public BookingResponseDTO getMyBooking(String pilgrimEmail) {
+        User user = userRepo.findByEmail(pilgrimEmail)
+                .orElseThrow(() -> new RuntimeException("User not found with email: " + pilgrimEmail));
+        Piligrim pilgrim = pilgrimRepo.findByUser(user)
+                .orElseThrow(() -> new RuntimeException("Pilgrim not found for user with email: " + pilgrimEmail));
+
+        if (pilgrim.getRoom() == null) {
+            return null; // No active booking
+        }
+
+        Room room = pilgrim.getRoom();
+        PGHostel hostel = pilgrim.getPgHostel();
+
+        return new BookingResponseDTO(
+                pilgrim.getId(),
+                hostel,
+                room,
+                pilgrimEmail
+        );
     }
+}

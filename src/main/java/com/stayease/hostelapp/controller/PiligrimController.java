@@ -78,4 +78,13 @@ public class PiligrimController {
         pilgrimService.cancelBooking(userDetails.getUsername());
         return ResponseEntity.ok("Booking cancelled successfully");
     }
+    @GetMapping("/my-booking")
+    @PreAuthorize("hasRole('PILGRIM')")
+    public ResponseEntity<BookingResponseDTO> getMyBooking(@AuthenticationPrincipal UserDetails userDetails) {
+        BookingResponseDTO booking = pilgrimService.getMyBooking(userDetails.getUsername());
+        if (booking == null) {
+            return ResponseEntity.ok(null);
+        }
+        return ResponseEntity.ok(booking);
+    }
 }
